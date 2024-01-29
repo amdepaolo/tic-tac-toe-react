@@ -27,8 +27,12 @@ function Game(){
     }
 
     function gameMove(cell){
-        claimCell(cell)
-        swapPlayer()
+        if (gameState[cell] == "X" || gameState[cell] == "O"){
+            return
+        } else {
+            claimCell(cell)
+            swapPlayer()
+        }
     }
 
     return(
