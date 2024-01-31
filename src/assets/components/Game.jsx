@@ -2,7 +2,7 @@ import { useState } from "react";
 import React from "react";
 
 function Game(){
-    const [gameState, setGameState] = useState({
+    const newGameState = {
         a1: " ", 
         a2: " ", 
         a3: " ", 
@@ -12,7 +12,8 @@ function Game(){
         c1: " ",
         c2: " ",
         c3: " "
-    })
+    }
+    const [gameState, setGameState] = useState( newGameState )
     const [currentPlayer, setPlayer] = useState("X")
 
     function swapPlayer(){
@@ -23,6 +24,8 @@ function Game(){
 
     function claimCell(cell){
         const newGameState = {...gameState, [cell]: currentPlayer}
+        const winStatus = winCheck(cell, newGameState)
+        console.log(winStatus)
         setGameState(newGameState)
     }
 
@@ -34,6 +37,27 @@ function Game(){
             swapPlayer()
         }
     }
+
+   function winCheck(lastClaimedCell, board){
+        const diagonals = ['a1','a3','b2','c1','c3']
+        const rowLetter = lastClaimedCell[0]
+        const columnNum = lastClaimedCell[1]
+        if ( board[rowLetter+1] == board[rowLetter+2] && board[rowLetter+2] == board[rowLetter+3]){
+            return "Horizontal Win" 
+        } else if (board["a"+columnNum] == board["b"+columnNum] && board['b'+columnNum] == board['c'+rowLetter]){
+            return "Vertical Win"
+        } else if (diagonals.includes(lastClaimedCell) && board.b2 != ' '){
+            if(board.a1 == board.b2 && board.b2 == board.c3){
+                return "Diagonal Win"
+            }
+            else if (board.a3 == board.b2 && board.b2 == board.c1){
+                return "Diagonal Win"
+            } else return "No Win yet"
+        } else return "No Win Yet"
+        
+    }
+    
+        
 
     return(
         <div>
