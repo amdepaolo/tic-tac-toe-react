@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 
 function Game(){
@@ -14,7 +14,18 @@ function Game(){
         c3: " "
     }
     const [gameState, setGameState] = useState( newGameState )
+    const [lastClaimedCell, setLastCell] = useState(" ")
     const [currentPlayer, setPlayer] = useState("X")
+    const [moveCount, setMoveCount] = useState(0)
+    let gameStatus;
+
+    useEffect(()=>{
+        if(winCheck()){
+            console.log("Winner")
+        } else if ( moveCount > 8 && !winCheck()){
+            console.log("DRAW!")
+        } else console.log("Keep Going")
+    })
 
     function swapPlayer(){
         if (currentPlayer === "X"){
@@ -24,9 +35,8 @@ function Game(){
 
     function claimCell(cell){
         const newGameState = {...gameState, [cell]: currentPlayer}
-        const winStatus = winCheck(cell, newGameState)
-        console.log(winStatus)
         setGameState(newGameState)
+        setLastCell(cell)
     }
 
     function gameMove(cell){
@@ -34,26 +44,28 @@ function Game(){
             return
         } else {
             claimCell(cell)
+            setMoveCount(moveCount+1)
             swapPlayer()
+            console.log(winCheck())
         }
     }
 
-   function winCheck(lastClaimedCell, board){
+   function winCheck(){
         const diagonals = ['a1','a3','b2','c1','c3']
         const rowLetter = lastClaimedCell[0]
         const columnNum = lastClaimedCell[1]
-        if ( board[rowLetter+1] == board[rowLetter+2] && board[rowLetter+2] == board[rowLetter+3]){
-            return "Horizontal Win" 
-        } else if (board["a"+columnNum] == board["b"+columnNum] && board['b'+columnNum] == board['c'+rowLetter]){
-            return "Vertical Win"
-        } else if (diagonals.includes(lastClaimedCell) && board.b2 != ' '){
-            if(board.a1 == board.b2 && board.b2 == board.c3){
-                return "Diagonal Win"
+        if ( gameState[rowLetter+1] == gameState[rowLetter+2] && gameState[rowLetter+2] == gameState[rowLetter+3]){
+            return true 
+        } else if (gameState["a"+columnNum] == gameState["b"+columnNum] && gameState['b'+columnNum] == gameState['c'+rowLetter]){
+            return true
+        } else if (diagonals.includes(lastClaimedCell) && gameState.b2 != ' '){
+            if(gameState.a1 == gameState.b2 && gameState.b2 == gameState.c3){
+                return true
             }
-            else if (board.a3 == board.b2 && board.b2 == board.c1){
-                return "Diagonal Win"
-            } else return "No Win yet"
-        } else return "No Win Yet"
+            else if (gameState.a3 == gameState.b2 && gameState.b2 == gameState.c1){
+                return true
+            } else return false
+        } else return false
         
     }
     
@@ -63,22 +75,27 @@ function Game(){
         <div>
             <h1> This will be a tic tac toe game... soon </h1>
             <h3>Current Player: {currentPlayer}</h3>
+            <h4>{gameStatus}</h4>
+
+            <button onClick={()=>setGameState(newGameState)}>Reset Game</button>
             <table>
-                <tr>
-                    <td onClick={()=>gameMove("a1")}>{gameState.a1}</td>
-                    <td onClick={()=>gameMove("a2")}>{gameState.a2}</td>
-                    <td onClick={()=>gameMove("a3")}>{gameState.a3}</td>
-                </tr>
-                <tr>
-                    <td onClick={()=>gameMove("b1")}>{gameState.b1}</td>
-                    <td onClick={()=>gameMove("b2")}>{gameState.b2}</td>
-                    <td onClick={()=>gameMove("b3")}>{gameState.b3}</td>
-                </tr>
-                <tr>
-                    <td onClick={()=>gameMove("c1")}>{gameState.c1}</td>
-                    <td onClick={()=>gameMove("c2")}>{gameState.c2}</td>
-                    <td onClick={()=>gameMove("c3")}>{gameState.c3}</td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td onClick={()=>gameMove("a1")}>{gameState.a1}</td>
+                        <td onClick={()=>gameMove("a2")}>{gameState.a2}</td>
+                        <td onClick={()=>gameMove("a3")}>{gameState.a3}</td>
+                    </tr>
+                    <tr>
+                        <td onClick={()=>gameMove("b1")}>{gameState.b1}</td>
+                        <td onClick={()=>gameMove("b2")}>{gameState.b2}</td>
+                        <td onClick={()=>gameMove("b3")}>{gameState.b3}</td>
+                    </tr>
+                    <tr>
+                        <td onClick={()=>gameMove("c1")}>{gameState.c1}</td>
+                        <td onClick={()=>gameMove("c2")}>{gameState.c2}</td>
+                        <td onClick={()=>gameMove("c3")}>{gameState.c3}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     )
