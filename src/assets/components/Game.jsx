@@ -14,18 +14,13 @@ function Game(){
         c3: " "
     }
     const [gameState, setGameState] = useState( newGameState )
-    const [lastClaimedCell, setLastCell] = useState(" ")
     const [currentPlayer, setPlayer] = useState("X")
-    const [moveCount, setMoveCount] = useState(0)
-    let gameStatus;
+    const [xCells, setXCells] = useState([])
+    const [oCells, setOCells] = useState([])
 
-    useEffect(()=>{
-        if(winCheck()){
-            console.log("Winner")
-        } else if ( moveCount > 8 && !winCheck()){
-            console.log("DRAW!")
-        } else console.log("Keep Going")
-    })
+    // useEffect(()=>{
+    //     console.log(gameStatus())
+    // },[xCells,oCells])
 
     function swapPlayer(){
         if (currentPlayer === "X"){
@@ -34,9 +29,16 @@ function Game(){
     }
 
     function claimCell(cell){
+        if (currentPlayer === "X"){
+            const updatedXs = [...xCells, cell]
+            setXCells(updatedXs)
+        } else {
+            const updatedOs = [...oCells, cell]
+            setOCells(updatedOs)}
         const newGameState = {...gameState, [cell]: currentPlayer}
+        console.log("xCells:", xCells)
+        console.log("oCells:", oCells)
         setGameState(newGameState)
-        setLastCell(cell)
     }
 
     function gameMove(cell){
@@ -44,29 +46,47 @@ function Game(){
             return
         } else {
             claimCell(cell)
-            setMoveCount(moveCount+1)
             swapPlayer()
-            console.log(winCheck())
         }
     }
 
-   function winCheck(){
-        const diagonals = ['a1','a3','b2','c1','c3']
-        const rowLetter = lastClaimedCell[0]
-        const columnNum = lastClaimedCell[1]
-        if ( gameState[rowLetter+1] == gameState[rowLetter+2] && gameState[rowLetter+2] == gameState[rowLetter+3]){
-            return true 
-        } else if (gameState["a"+columnNum] == gameState["b"+columnNum] && gameState['b'+columnNum] == gameState['c'+rowLetter]){
-            return true
-        } else if (diagonals.includes(lastClaimedCell) && gameState.b2 != ' '){
-            if(gameState.a1 == gameState.b2 && gameState.b2 == gameState.c3){
+    function winCheck(playerClaimedCells){
+        if(playerClaimedCells.length > 0)
+            {const lastClaimedCell = playerClaimedCells.at(-1)
+            const rowLetter = lastClaimedCell[0]
+            const columnNum = lastClaimedCell[1]
+            if ( playerClaimedCells.filter(cell=> cell[0] === rowLetter).length === 3){
+                return true 
+            } else if (playerClaimedCells.filter(cell=> cell[1] === columnNum).length === 3){
                 return true
-            }
-            else if (gameState.a3 == gameState.b2 && gameState.b2 == gameState.c1){
-                return true
-            } else return false
-        } else return false
-        
+            } else if (playerClaimedCells.includes("b2")){
+                if(playerClaimedCells.includes("a1") && playerClaimedCells.includes("c3")){
+                    return true
+                }
+                else if (playerClaimedCells.includes("a3") && playerClaimedCells.includes("c1")){
+                    return true
+                } else return false
+            } else return false}
+        else return false
+    }
+
+    function gameStatus(){
+        const xWin = winCheck(xCells)
+        const oWin = winCheck(oCells)
+        const gameLength = xCells.length + oCells.length
+        if (xWin){ 
+            return "Game Over! X wins"
+        } else if (oWin){
+            return "Game Over! O wins"
+        } else if (gameLength == 9) { 
+            return "Game Over! Draw"
+        } else {return " "}
+    }
+
+    function resetGame(){
+        setGameState(newGameState)
+        setOCells([])
+        setXCells([])
     }
     
         
@@ -75,9 +95,9 @@ function Game(){
         <div>
             <h1> This will be a tic tac toe game... soon </h1>
             <h3>Current Player: {currentPlayer}</h3>
-            <h4>{gameStatus}</h4>
 
-            <button onClick={()=>setGameState(newGameState)}>Reset Game</button>
+            <button onClick={resetGame}>Reset Game</button>
+            <button onClick={()=>console.log(gameStatus())}> Win Check!</button>
             <table>
                 <tbody>
                     <tr>
