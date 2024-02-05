@@ -18,10 +18,16 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+table{
+  margin: auto;
+}
+
 td{
-  font-size: large;
-  padding: 10pt;
+  font-size:25pt;
+  padding: 0pt;
   border: 1.5pt solid black;
+  height: 100px;
+  width: 100px;
 }
 
 @keyframes logo-spin {
