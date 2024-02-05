@@ -19,8 +19,11 @@ function Game(){
     const [oCells, setOCells] = useState([])
 
     // useEffect(()=>{
-    //     console.log(gameStatus())
+    //     )
     // },[xCells,oCells])
+
+    const statusMessage = gameStatus()
+    const keepPlaying = gameStatus() === " "
 
     function swapPlayer(){
         if (currentPlayer === "X"){
@@ -36,13 +39,11 @@ function Game(){
             const updatedOs = [...oCells, cell]
             setOCells(updatedOs)}
         const newGameState = {...gameState, [cell]: currentPlayer}
-        console.log("xCells:", xCells)
-        console.log("oCells:", oCells)
         setGameState(newGameState)
     }
 
     function gameMove(cell){
-        if (gameState[cell] == "X" || gameState[cell] == "O"){
+        if (gameState[cell] == "X" || gameState[cell] == "O" || !keepPlaying){
             return
         } else {
             claimCell(cell)
@@ -95,7 +96,7 @@ function Game(){
         <div>
             <h1> This will be a tic tac toe game... soon </h1>
             <h3>Current Player: {currentPlayer}</h3>
-
+            <h4>{statusMessage}</h4>
             <button onClick={resetGame}>Reset Game</button>
             <button onClick={()=>console.log(gameStatus())}> Win Check!</button>
             <table>
