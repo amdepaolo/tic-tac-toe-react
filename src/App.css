@@ -20,14 +20,20 @@
 
 table{
   margin: auto;
+  background-color: black;
 }
 
 td{
+  background-color: white;
   font-size:25pt;
   padding: 0pt;
   border: 1.5pt solid black;
   height: 100px;
   width: 100px;
+}
+
+td:hover {
+  background-color: rgb(255, 229, 80);
 }
 
 @keyframes logo-spin {

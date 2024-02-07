@@ -17,11 +17,6 @@ function Game(){
     const [currentPlayer, setPlayer] = useState("X")
     const [xCells, setXCells] = useState([])
     const [oCells, setOCells] = useState([])
-
-    // useEffect(()=>{
-    //     )
-    // },[xCells,oCells])
-
     const statusMessage = gameStatus()
     const keepPlaying = gameStatus() === " "
 
@@ -94,11 +89,9 @@ function Game(){
 
     return(
         <div>
-            <h1> This will be a tic tac toe game... soon </h1>
-            <h3>Current Player: {currentPlayer}</h3>
-            <h4>{statusMessage}</h4>
+            <h1> This is a tic tac toe game </h1>
+            <h3>{statusMessage}</h3>
             <button onClick={resetGame}>Reset Game</button>
-            <button onClick={()=>console.log(gameStatus())}> Win Check!</button>
             <table>
                 <tbody>
                     <tr>
@@ -118,6 +111,7 @@ function Game(){
                     </tr>
                 </tbody>
             </table>
+            <h3>Current Player: {currentPlayer}</h3>
         </div>
     )
 
