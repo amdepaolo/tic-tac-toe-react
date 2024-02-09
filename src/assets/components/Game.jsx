@@ -84,14 +84,13 @@ function Game(){
         setOCells([])
         setXCells([])
     }
-    
-        
 
     return(
         <div>
             <h1> This is a tic tac toe game </h1>
             <h3>{statusMessage}</h3>
             <button onClick={resetGame}>Reset Game</button>
+            <button>Computer Move</button>
             <table>
                 <tbody>
                     <tr>
