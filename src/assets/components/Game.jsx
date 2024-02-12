@@ -85,11 +85,28 @@ function Game(){
         setXCells([])
     }
 
+    function legalMoveCheck(cell){
+        return gameState[cell] === " "
+    }
+
+    function dumbAlgo(){
+        const lettArr = ["a", "b","c"]
+        let randLetter = lettArr[Math.floor(Math.random() * 3)]
+        let randNum = Math.floor(Math.random() * 3) + 1
+        while (!legalMoveCheck(randLetter+randNum)){
+            console.log("illegal Move", randLetter+randNum)
+            randLetter = lettArr[Math.floor(Math.random() * 3)]
+            randNum = Math.floor(Math.random() * 3) + 1;
+        }
+        return randLetter + randNum
+    }
+
     return(
         <div>
             <h1> This is a tic tac toe game </h1>
             <h3>{statusMessage}</h3>
             <button onClick={resetGame}>Reset Game</button>
+            <button onClick={()=>console.log(dumbAlgo())}>Check DumbAlgo</button>
             <button>Computer Move</button>
             <table>
                 <tbody>
