@@ -72,6 +72,12 @@ function Game(){
         else return false
     }
 
+    
+    if(compOpponent.active && compOpponent.playingAs === currentPlayer){
+            const computerMove = dumbAlgo()
+            gameMove(computerMove)
+        }
+
     function gameStatus(){
         const xWin = winCheck(xCells)
         const oWin = winCheck(oCells)
@@ -95,6 +101,8 @@ function Game(){
         return gameState[cell] === " "
     }
 
+
+    //the dumb algorithm for computer moves just picks moves at random
     function dumbAlgo(){
         const lettArr = ["a", "b","c"]
         let randLetter = lettArr[Math.floor(Math.random() * 3)]
