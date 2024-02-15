@@ -12,19 +12,27 @@ function Game(){
         c1: " ",
         c2: " ",
         c3: " "
-    }
-    const [gameState, setGameState] = useState( newGameState )
-    const [currentPlayer, setPlayer] = useState("X")
-    const [xCells, setXCells] = useState([])
-    const [oCells, setOCells] = useState([])
-    const statusMessage = gameStatus()
-    const keepPlaying = gameStatus() === " "
+    };
+
+    const computerOpponentObj = {
+        active: false,
+        algo: "dumb",
+        playingAs: "O"
+    };
+
+    const [gameState, setGameState] = useState( newGameState );
+    const [currentPlayer, setPlayer] = useState("X");
+    const [compOpponent, setCompOpponent] = useState(computerOpponentObj);
+    const [xCells, setXCells] = useState([]);
+    const [oCells, setOCells] = useState([]);
+    const statusMessage = gameStatus();
+    const keepPlaying = gameStatus() === " ";
 
     function swapPlayer(){
         if (currentPlayer === "X"){
             setPlayer("O")
         } else setPlayer("X")
-    }
+    };
 
     function claimCell(cell){
         if (currentPlayer === "X"){
@@ -35,16 +43,14 @@ function Game(){
             setOCells(updatedOs)}
         const newGameState = {...gameState, [cell]: currentPlayer}
         setGameState(newGameState)
-    }
+    };
 
     function gameMove(cell){
-        if (gameState[cell] == "X" || gameState[cell] == "O" || !keepPlaying){
-            return
-        } else {
+        if (legalMoveCheck(cell) && keepPlaying){
             claimCell(cell)
             swapPlayer()
         }
-    }
+    };
 
     function winCheck(playerClaimedCells){
         if(playerClaimedCells.length > 0)
@@ -101,13 +107,19 @@ function Game(){
         return randLetter + randNum
     }
 
+    function activateOpponent(bool){
+        const updatedOppObj = {...compOpponent, active: bool}
+        setCompOpponent(updatedOppObj)
+        console.log("computer opponent activity:", compOpponent.active)
+    }
+
     return(
         <div>
             <h1> This is a tic tac toe game </h1>
             <h3>{statusMessage}</h3>
             <button onClick={resetGame}>Reset Game</button>
-            <button onClick={()=>console.log(dumbAlgo())}>Check DumbAlgo</button>
-            <button>Computer Move</button>
+            <button disabled={compOpponent.active} onClick={()=>activateOpponent(true)}>Play with computer</button>
+            <button disabled={!compOpponent.active} onClick={()=>activateOpponent(false)}>Play with humans</button>
             <table>
                 <tbody>
                     <tr>
