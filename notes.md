@@ -32,3 +32,17 @@ order of steps needed to build this:
     4. front end interface to choose computer opponent
     5. build other algos
     6. visual florishes
+
+### play to win algorithm brainstorming:
+
+where to store move bank array? in computer opponent obj? in state
+
+possible idea: 
+- build empty win array
+- pick a random cell
+- picks vertical, horizontal, diagonal if possible at random
+    - creates array of arrays, dicating next moves,
+    - if win not possible with next move in flattened array, remove full array of moves
+    - if array empty, build new array
+    
+make function to build array, and function to make next move in array/ refill array when empty

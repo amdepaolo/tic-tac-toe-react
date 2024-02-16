@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import React from "react";
 
 function Game(){
@@ -114,6 +114,13 @@ function Game(){
         }
         return randLetter + randNum
     }
+
+    /*
+        psuedocode for offensive play algo
+        
+
+
+    */
 
     function activateOpponent(bool){
         const updatedOppObj = {...compOpponent, active: bool}
