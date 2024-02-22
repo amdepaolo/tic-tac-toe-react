@@ -14,6 +14,8 @@ function Game(){
         c3: " "
     };
 
+    
+
     const computerOpponentObj = {
         active: false,
         algo: "dumb",
@@ -117,15 +119,42 @@ function Game(){
 
     /*
         psuedocode for offensive play algo
-        
-
-
+        - build empty win array
+        - pick a random cell
+        - creates array of arrays, dicating next moves,
+        - if win not possible with next move in flattened array, remove full array of moves
+        - if array empty, build new array
     */
+
+    function offensiveAlgo(){
+        const moveArray = []
+        const firstMove = dumbAlgo()
+        function jumbleSplicePush(moves){
+            moves.splice(moves.indexOf(firstMove),1)
+            if (Math.round(Math.random()) == 1){
+                moves.reverse()
+            }
+            if (Math.round(Math.random() == 1)){
+                moveArray.unshift(moves)
+            } else {moveArray.push(moves)}
+        }
+        const moveLetter = firstMove[0]
+        const moveNumber = firstMove[1]
+        const vertMoves = [moveLetter+1, moveLetter+2, moveLetter+3]
+        jumbleSplicePush(vertMoves)
+        const horizMoves = ["a"+moveNumber, "b"+ moveNumber, "c"+moveNumber]
+        jumbleSplicePush(horizMoves)
+        const diagMoves1 = ["a1","b2","c3"]
+        if( diagMoves1.includes(firstMove)){jumbleSplicePush(diagMoves1)}
+        const diagMoves2 = ["a3","b2","c1"]
+        if( diagMoves2.includes(firstMove)){jumbleSplicePush(diagMoves2)}
+        moveArray.unshift(firstMove)
+        return moveArray
+    }
 
     function activateOpponent(bool){
         const updatedOppObj = {...compOpponent, active: bool}
         setCompOpponent(updatedOppObj)
-        console.log("computer opponent activity:", compOpponent.active)
     }
 
     return(
@@ -133,6 +162,7 @@ function Game(){
             <h1> This is a tic tac toe game </h1>
             <h3>{statusMessage}</h3>
             <button onClick={resetGame}>Reset Game</button>
+            <button onClick={()=> console.log(offensiveAlgo())}>log array</button>
             <button disabled={compOpponent.active} onClick={()=>activateOpponent(true)}>Play with computer</button>
             <button disabled={!compOpponent.active} onClick={()=>activateOpponent(false)}>Play with humans</button>
             <table>

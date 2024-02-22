@@ -46,3 +46,7 @@ possible idea:
     - if array empty, build new array
     
 make function to build array, and function to make next move in array/ refill array when empty
+
+move computer player to a new component?
+
+options component?
