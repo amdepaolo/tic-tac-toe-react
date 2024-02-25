@@ -1,7 +1,7 @@
 import { useState } from "react";
 import React from "react";
 
-function Game(){
+function Game({opponent}){
     const newGameState = {
         a1: " ", 
         a2: " ", 
@@ -14,19 +14,11 @@ function Game(){
         c3: " "
     };
 
-    
-
-    const computerOpponentObj = {
-        active: false,
-        algo: "dumb",
-        playingAs: "O"
-    };
-
     const [gameState, setGameState] = useState( newGameState );
     const [currentPlayer, setPlayer] = useState("X");
-    const [compOpponent, setCompOpponent] = useState(computerOpponentObj);
     const [xCells, setXCells] = useState([]);
     const [oCells, setOCells] = useState([]);
+    const [oppMoveArray, setMoveArray] = useState([])
     const statusMessage = gameStatus();
     const keepPlaying = gameStatus() === " ";
 
@@ -74,8 +66,7 @@ function Game(){
         else return false
     }
 
-    
-    if(compOpponent.active && compOpponent.playingAs === currentPlayer){
+    if(opponent.active && opponent.playingAs === currentPlayer){
             const computerMove = dumbAlgo()
             gameMove(computerMove)
         }
@@ -103,14 +94,12 @@ function Game(){
         return gameState[cell] === " "
     }
 
-
     //the dumb algorithm for computer moves just picks moves at random
     function dumbAlgo(){
         const lettArr = ["a", "b","c"]
         let randLetter = lettArr[Math.floor(Math.random() * 3)]
         let randNum = Math.floor(Math.random() * 3) + 1
         while (!legalMoveCheck(randLetter+randNum)){
-            console.log("illegal Move", randLetter+randNum)
             randLetter = lettArr[Math.floor(Math.random() * 3)]
             randNum = Math.floor(Math.random() * 3) + 1;
         }
@@ -125,7 +114,6 @@ function Game(){
         - if win not possible with next move in flattened array, remove full array of moves
         - if array empty, build new array
     */
-
     function offensiveAlgo(){
         const moveArray = []
         const firstMove = dumbAlgo()
@@ -162,9 +150,6 @@ function Game(){
             <h1> This is a tic tac toe game </h1>
             <h3>{statusMessage}</h3>
             <button onClick={resetGame}>Reset Game</button>
-            <button onClick={()=> console.log(offensiveAlgo())}>log array</button>
-            <button disabled={compOpponent.active} onClick={()=>activateOpponent(true)}>Play with computer</button>
-            <button disabled={!compOpponent.active} onClick={()=>activateOpponent(false)}>Play with humans</button>
             <table>
                 <tbody>
                     <tr>
