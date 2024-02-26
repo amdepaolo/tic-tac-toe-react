@@ -8,15 +8,36 @@ function OpponentOptions({opponent, setCompOpponent}){
         setCompOpponent(updatedOppObj)
     }
 
+    function changeAlgo(value){
+        const updatedOppObj ={...opponent, algo: value}
+        setCompOpponent(updatedOppObj)
+    }
+
+    function changeXOrO(value){
+        const updatedOppObj ={...opponent, playingAs: value}
+        setCompOpponent(updatedOppObj)
+    }
+
     return (
         <form>
             <button disabled={active} onClick={()=>activateOpponent(true)}>Play with computer</button>
             <button disabled={!active} onClick={()=>activateOpponent(false)}>Play with humans</button>
-            <label>Select Opponent Playstyle: </label>
-            <select>
-                <option>Random</option>
-                <option>Offensive</option>
-                <option>Defensive</option>
+            <label> Select Opponent Playstyle: </label>
+            <select
+                value={algo}
+                onChange={e=>changeAlgo(e.target.value)}
+            >
+                <option value="dumb">Random</option>
+                <option value="offensive">Offensive</option>
+                <option value="defensive">Defensive</option>
+            </select>
+            <label> Opponent is playing as: </label>
+            <select
+                value={playingAs}
+                onChange={e=>changeXOrO(e.target.value)}
+            >
+                <option value="O"> O </option>
+                <option value="X"> X </option>
             </select>
         </form>
     )
